@@ -1,5 +1,6 @@
 /* Staunty artwork and collapsible puzzle filters. */
-.board-stage { width: min(100%, calc(100vh - 245px)); }
+.board-column { min-width: 0; }
+.board-stage { width: min(100%, calc(100vh - 245px)); max-width: 100%; min-width: 0; }
 .board-wrap { width: 100%; }
 
 .piece {
@@ -120,6 +121,9 @@
   opacity: .65;
 }
 .board-dock {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin-top: 10px;
   padding: 9px;
   border: 1px solid #45423e;
@@ -135,6 +139,9 @@
   font-weight: 700;
 }
 .review-controls {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   margin: 0;
   padding: 7px;
   background: #302e2b;
@@ -142,6 +149,9 @@
 }
 .review-moves {
   display: flex;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   flex-wrap: nowrap;
   gap: 5px;
   margin-top: 7px;
@@ -164,17 +174,19 @@
 }
 .move-chip.active { color: #fff; background: #719b45; }
 .review-nav { display: flex; align-items: center; justify-content: space-between; color: #aaa; font-size: 12px; }
-.review-nav span { padding: 0 8px; text-align: center; }
+.review-nav span { min-width: 0; padding: 0 8px; text-align: center; overflow-wrap: anywhere; }
 .review-button { width: 44px; height: 38px; flex: 0 0 44px; border: 0; border-radius: 3px; color: #ddd; background: #4b4844; cursor: pointer; font-size: 20px; }
 .review-button:disabled { color: #777; cursor: not-allowed; opacity: .55; }
 .review-controls.locked { background: #353330; }
-.board-actions { display: flex; gap: 7px; margin-top: 7px; }
+.board-actions { display: flex; width: 100%; max-width: 100%; min-width: 0; gap: 7px; margin-top: 7px; }
 .board-actions .primary,
-.board-actions .secondary { min-height: 42px; margin-top: 0; padding: 9px 10px; }
+.board-actions .secondary { min-width: 0; min-height: 42px; margin-top: 0; padding: 9px 10px; }
 .board-actions .next-puzzle { flex: 1.45; }
 .board-actions .secondary { flex: 1; }
 
 @media (max-width: 800px) {
+  .game-shell { grid-template-columns: minmax(0, 1fr); }
+  .board-column { width: 100%; max-width: 680px; min-width: 0; margin: 0 auto; }
   .board-stage { width: 100%; }
   .board-dock { margin-top: 8px; padding: 7px; }
   .board-dock .turn-hint { margin-bottom: 5px; }
