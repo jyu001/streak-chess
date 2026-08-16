@@ -2,7 +2,7 @@
  const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
  const els={board:$('#board'),message:$('#boardMessage'),hint:$('#turnHint'),play:$('#playView'),end:$('#endView'),filters:$('#filterSection'),range:$('#ratingRange'),category:$('#category'),filterSummary:$('#filterSummary'),score:$('#streakScore'),target:$('#targetRating'),passed:$('#currentBest'),playingCategory:$('#playingCategory'),number:$('#puzzleNumber'),status:$('#playStatus'),review:$('#reviewControls'),reviewMoves:$('#reviewMoves'),reviewPrevious:$('#reviewPrevious'),reviewNext:$('#reviewNext'),reviewPosition:$('#reviewPosition'),nextPuzzle:$('#nextPuzzleButton'),replayPuzzle:$('#replayPuzzleButton'),backToStreak:$('#backToStreakButton'),giveUp:$('#giveUpButton')};
  const defaults={coordinates:true,sound:true,animation:true,window:75};
- const playableBuckets=new Set(Array.from({length:16},(_,i)=>1500+i*100));
+ const playableBuckets=new Set(Array.from({length:21},(_,i)=>1000+i*100));
  const isPlayableBucket=bucket=>playableBuckets.has(Number(bucket));
  function readSettings(){try{return JSON.parse(localStorage.getItem('streakChessSettings')||'{}')}catch{return{}}}
  window.appSettings={...defaults,...readSettings()};

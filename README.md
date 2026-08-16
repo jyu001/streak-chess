@@ -4,7 +4,7 @@ A standalone, local-first puzzle-streak page inspired by Lichess, with configura
 
 ## Play
 
-Double-click `index.html` and it will open directly in your browser. No local server, installation, build step, or internet connection is required. It opens immediately on a random, locally unsolved 1500–1599 Mate puzzle. Expand **Filters** to search any 100-point rating band through 3000+. All 269,584 extracted Mate puzzles rated 1500 or higher are available to the published app, and only the selected band is loaded into memory.
+Double-click `index.html` and it will open directly in your browser. No local server, installation, build step, or internet connection is required. It opens immediately on a random, locally unsolved 1500–1599 Mate puzzle. Expand **Filters** to search any 100-point rating band from 1000 through 3000+. The published app contains 1,000 curated Mate puzzles in each band from 1000–1499, plus all 269,584 extracted Mate puzzles rated 1500 or higher (274,584 total). Only the selected band is loaded into memory.
 
 Every completed puzzle is recorded immediately in persistent browser storage as Passed or Failed. History retains the puzzle ID, rating, category, rating band, duration, full FEN and move sequence, and attempted/expected move on a failure for later educational review. History links restart the saved puzzle in playing mode inside this app, even after the page has been closed. A failed replay keeps the solution hidden and offers Replay Puzzle; solving it unlocks move navigation.
 
@@ -27,12 +27,16 @@ python3 scripts/extract_mate_puzzles.py \
   data/source/lichess_db_puzzle.csv.zst \
   data/filtered/lichess_mate_1400_plus.csv
 
+python3 scripts/build_beginner_puzzle_buckets.py \
+  data/source/lichess_db_puzzle.csv.zst \
+  data/browser
+
 python3 scripts/build_browser_puzzle_buckets.py \
   data/filtered/lichess_mate_1400_plus.csv \
   data/browser
 ```
 
-The application reads `data/browser/manifest.js` and dynamically loads the selected rating bucket. Large generated datasets are excluded by `data/.gitignore` but remain available locally.
+The application reads `data/browser/manifest.js` and dynamically loads the selected rating bucket. The large source and intermediate datasets are excluded by `data/.gitignore` but remain available locally.
 
 Puzzle history and settings are stored in browser localStorage. They remain private to the current browser and do not synchronize between devices. See `FUTURE_NOTES.md` for the storage schema, architecture, limitations, and suggested next work.
 
@@ -40,7 +44,7 @@ Puzzle history and settings are stored in browser localStorage. They remain priv
 
 The repository is a static GitHub Pages site. Publish from the root of the
 default branch. `.nojekyll` prevents Jekyll processing, while `.gitignore`
-keeps the source database, intermediate CSV, 1400 bucket, development scripts,
+keeps the source database, intermediate CSV, development scripts,
 and internal notes out of the public repository.
 
 The Staunty artwork is licensed for noncommercial use. See

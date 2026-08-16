@@ -1,4 +1,3 @@
-# Large local datasets stay private. Publish only the 1500+ browser buckets.
+# Large source and intermediate datasets stay private.
 source/
 filtered/
-browser/puzzles-1400.js
