@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#262522">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src 'none'">
+  <title>Streak Chess</title>
+  <link rel="stylesheet" href="css/style.css?v=2">
+  <link rel="stylesheet" href="css/filters.css?v=4">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Streak Chess home"><span class="brand-knight">♞</span><span>STREAK <b>CHESS</b></span></a>
+    <button id="settingsButton" class="icon-button" aria-label="Open settings" title="Settings">⚙</button>
+  </header>
+
+  <main>
+    <section class="game-shell">
+      <div class="board-column">
+        <div id="boardWrap" class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="Interactive chess board"></div>
+          <div id="boardMessage" class="board-message" aria-live="polite"></div>
+        </div>
+        <p id="turnHint" class="turn-hint">Choose your starting difficulty, then begin.</p>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-heading"><span class="flame">◆</span><span>PUZZLE STREAK</span></div>
+        <details id="filterSection" class="filter-section">
+          <summary><span>FILTERS</span><strong id="filterSummary">1500–1599 · Mate</strong></summary>
+          <div class="filter-body">
+            <label>Rating level
+              <select id="ratingRange">
+                <option value="1500" selected>1500–1599</option>
+                <option value="1600">1600–1699</option><option value="1700">1700–1799</option>
+                <option value="1800">1800–1899</option><option value="1900">1900–1999</option>
+                <option value="2000">2000–2099</option><option value="2100">2100–2199</option>
+                <option value="2200">2200–2299</option><option value="2300">2300–2399</option>
+                <option value="2400">2400–2499</option><option value="2500">2500–2599</option>
+                <option value="2600">2600–2699</option><option value="2700">2700–2799</option>
+                <option value="2800">2800–2899</option><option value="2900">2900–2999</option>
+                <option value="3000">3000+</option>
+              </select>
+            </label>
+            <label>Category
+              <select id="category"><option value="" disabled>Select category</option><option value="mate" selected>Mate</option></select>
+            </label>
+            <button id="applyFilters" class="primary compact">APPLY FILTERS</button>
+          </div>
+        </details>
+
+        <div id="playView" class="panel-view">
+          <div class="big-score"><strong id="streakScore">0</strong><span>current streak</span></div>
+          <div class="metric-grid"><div><span>Rating level</span><strong id="targetRating">1500–1599</strong></div><div><span>Passed</span><strong id="currentBest">0</strong></div><div><span>Category</span><strong id="playingCategory">Mate</strong></div><div><span>Puzzle</span><strong id="puzzleNumber">#1</strong></div></div>
+          <div id="playStatus" class="status">Your move</div>
+          <div id="reviewControls" class="review-controls locked">
+            <div id="reviewMoves" class="review-moves"></div>
+            <div class="review-nav">
+              <button id="reviewPrevious" class="review-button" aria-label="Previous move" title="Previous move" disabled>←</button>
+              <span id="reviewPosition">Solve puzzle to review moves</span>
+              <button id="reviewNext" class="review-button" aria-label="Next move" title="Next move" disabled>→</button>
+            </div>
+          </div>
+          <button id="nextPuzzleButton" class="primary next-puzzle" disabled>NEXT PUZZLE</button>
+          <button id="replayPuzzleButton" class="secondary hidden">REPLAY PUZZLE</button>
+          <button id="backToStreakButton" class="secondary hidden">BACK TO STREAK</button>
+          <button id="giveUpButton" class="secondary">END RUN</button>
+        </div>
+
+        <div id="endView" class="panel-view hidden">
+          <div class="end-title">Streak ended</div>
+          <div class="big-score"><strong id="finalScore">0</strong><span>puzzles solved</span></div>
+          <div id="endSummary" class="end-summary"></div>
+          <button id="retryButton" class="primary">TRY AGAIN</button>
+          <button id="changeButton" class="secondary">CHANGE DIFFICULTY</button>
+        </div>
+      </aside>
+    </section>
+
+    <section class="lower">
+      <div class="stats" id="stats"></div>
+      <div class="history-card">
+        <div class="section-title"><h2>History</h2><button id="clearHistory" class="text-button">Clear</button></div>
+        <div id="history" class="history"></div>
+        <p class="history-storage-note">History is stored privately in this browser and does not sync between devices.</p>
+      </div>
+      <p class="credit">Puzzles from the <a href="https://database.lichess.org/#puzzles" target="_blank" rel="noreferrer">Lichess Open Puzzle Database</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/" target="_blank" rel="noreferrer">CC0</a><br><a href="https://github.com/lichess-org/lila/tree/master/public/piece/staunty" target="_blank" rel="noreferrer">Staunty pieces</a> by sadsnake1 · <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a> · Noncommercial use</p>
+    </section>
+  </main>
+
+  <dialog id="settingsDialog">
+    <form method="dialog">
+      <div class="section-title"><h2>Settings</h2><button class="icon-button" value="cancel" aria-label="Close">×</button></div>
+      <label class="toggle"><span>Board coordinates</span><input id="coordinatesSetting" type="checkbox" checked></label>
+      <label class="toggle"><span>Move sounds</span><input id="soundSetting" type="checkbox" checked></label>
+      <label class="toggle"><span>Move animation</span><input id="animationSetting" type="checkbox" checked></label>
+      <label>Rating selection range<select id="windowSetting"><option value="50">±50</option><option value="75" selected>±75</option><option value="100">±100</option></select></label>
+      <button class="primary" value="default">DONE</button>
+    </form>
+  </dialog>
+  <script src="data/browser/manifest.js?v=2"></script>
+  <script src="js/puzzle-engine.js?v=3"></script>
+  <script src="js/history.js?v=3"></script>
+  <script src="js/app.js?v=13"></script>
+</body>
+</html>

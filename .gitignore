@@ -1,0 +1,14 @@
+.DS_Store
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.zip
+*.tar
+*.tar.gz
+deploy/
+FUTURE_NOTES.md
+scripts/
+js/puzzles.js
+data/README.md
