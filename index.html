@@ -8,7 +8,7 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src 'none'">
   <title>Streak Chess</title>
   <link rel="stylesheet" href="css/style.css?v=2">
-  <link rel="stylesheet" href="css/filters.css?v=4">
+  <link rel="stylesheet" href="css/filters.css?v=5">
 </head>
 <body>
   <header class="topbar">
@@ -19,11 +19,29 @@
   <main>
     <section class="game-shell">
       <div class="board-column">
-        <div id="boardWrap" class="board-wrap">
-          <div id="board" class="board" role="grid" aria-label="Interactive chess board"></div>
-          <div id="boardMessage" class="board-message" aria-live="polite"></div>
+        <div class="board-stage">
+          <div id="boardWrap" class="board-wrap">
+            <div id="board" class="board" role="grid" aria-label="Interactive chess board"></div>
+            <div id="boardMessage" class="board-message" aria-live="polite"></div>
+          </div>
+          <section class="board-dock" aria-label="Puzzle controls">
+            <p id="turnHint" class="turn-hint">Choose your starting difficulty, then begin.</p>
+            <div id="reviewControls" class="review-controls locked">
+              <div class="review-nav">
+                <button id="reviewPrevious" class="review-button" aria-label="Previous move" title="Previous move" disabled>←</button>
+                <span id="reviewPosition">Solve puzzle to review moves</span>
+                <button id="reviewNext" class="review-button" aria-label="Next move" title="Next move" disabled>→</button>
+              </div>
+              <div id="reviewMoves" class="review-moves"></div>
+            </div>
+            <div class="board-actions">
+              <button id="nextPuzzleButton" class="primary next-puzzle" disabled>NEXT PUZZLE</button>
+              <button id="replayPuzzleButton" class="secondary hidden">REPLAY PUZZLE</button>
+              <button id="backToStreakButton" class="secondary hidden">BACK TO STREAK</button>
+              <button id="giveUpButton" class="secondary">END RUN</button>
+            </div>
+          </section>
         </div>
-        <p id="turnHint" class="turn-hint">Choose your starting difficulty, then begin.</p>
       </div>
 
       <aside class="panel">
@@ -55,18 +73,6 @@
           <div class="big-score"><strong id="streakScore">0</strong><span>current streak</span></div>
           <div class="metric-grid"><div><span>Rating level</span><strong id="targetRating">1500–1599</strong></div><div><span>Passed</span><strong id="currentBest">0</strong></div><div><span>Category</span><strong id="playingCategory">Mate</strong></div><div><span>Puzzle</span><strong id="puzzleNumber">#1</strong></div></div>
           <div id="playStatus" class="status">Your move</div>
-          <div id="reviewControls" class="review-controls locked">
-            <div id="reviewMoves" class="review-moves"></div>
-            <div class="review-nav">
-              <button id="reviewPrevious" class="review-button" aria-label="Previous move" title="Previous move" disabled>←</button>
-              <span id="reviewPosition">Solve puzzle to review moves</span>
-              <button id="reviewNext" class="review-button" aria-label="Next move" title="Next move" disabled>→</button>
-            </div>
-          </div>
-          <button id="nextPuzzleButton" class="primary next-puzzle" disabled>NEXT PUZZLE</button>
-          <button id="replayPuzzleButton" class="secondary hidden">REPLAY PUZZLE</button>
-          <button id="backToStreakButton" class="secondary hidden">BACK TO STREAK</button>
-          <button id="giveUpButton" class="secondary">END RUN</button>
         </div>
 
         <div id="endView" class="panel-view hidden">

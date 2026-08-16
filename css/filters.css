@@ -1,7 +1,6 @@
 /* Staunty artwork and collapsible puzzle filters. */
-.board-wrap {
-  width: min(100%, calc(100vh - 105px));
-}
+.board-stage { width: min(100%, calc(100vh - 245px)); }
+.board-wrap { width: 100%; }
 
 .piece {
   width: 91%;
@@ -120,20 +119,41 @@
   cursor: not-allowed;
   opacity: .65;
 }
+.board-dock {
+  margin-top: 10px;
+  padding: 9px;
+  border: 1px solid #45423e;
+  border-radius: 5px;
+  background: #34322f;
+  box-shadow: 0 4px 12px #0004;
+}
+.board-dock .turn-hint {
+  min-height: 20px;
+  margin: 0 0 7px;
+  color: #d1cdc7;
+  font-size: 13px;
+  font-weight: 700;
+}
 .review-controls {
-  margin: 2px 0 12px;
-  padding: 11px;
+  margin: 0;
+  padding: 7px;
   background: #302e2b;
   border-radius: 3px;
 }
 .review-moves {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 5px;
-  max-height: 92px;
-  overflow: auto;
+  margin-top: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+}
+.review-moves:empty {
+  display: none;
 }
 .move-chip {
+  flex: 0 0 auto;
   padding: 4px 7px;
   border: 0;
   border-radius: 3px;
@@ -143,12 +163,22 @@
   font: 12px ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 .move-chip.active { color: #fff; background: #719b45; }
-.review-nav { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; color: #aaa; font-size: 12px; }
-.review-button { width: 36px; height: 30px; border: 0; border-radius: 3px; color: #ddd; background: #4b4844; cursor: pointer; }
+.review-nav { display: flex; align-items: center; justify-content: space-between; color: #aaa; font-size: 12px; }
+.review-nav span { padding: 0 8px; text-align: center; }
+.review-button { width: 44px; height: 38px; flex: 0 0 44px; border: 0; border-radius: 3px; color: #ddd; background: #4b4844; cursor: pointer; font-size: 20px; }
 .review-button:disabled { color: #777; cursor: not-allowed; opacity: .55; }
 .review-controls.locked { background: #353330; }
-.review-controls.locked .review-nav { margin-top: 0; }
+.board-actions { display: flex; gap: 7px; margin-top: 7px; }
+.board-actions .primary,
+.board-actions .secondary { min-height: 42px; margin-top: 0; padding: 9px 10px; }
+.board-actions .next-puzzle { flex: 1.45; }
+.board-actions .secondary { flex: 1; }
 
 @media (max-width: 800px) {
-  .board-wrap { width: 100%; }
+  .board-stage { width: 100%; }
+  .board-dock { margin-top: 8px; padding: 7px; }
+  .board-dock .turn-hint { margin-bottom: 5px; }
+  .review-controls { padding: 5px; }
+  .review-button { height: 42px; }
+  .board-actions { margin-top: 5px; }
 }

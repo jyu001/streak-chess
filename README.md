@@ -12,6 +12,10 @@ The left/right move-review buttons remain visible but disabled for unsolved and 
 
 History can be opened during an active winning streak without resetting it. The app pauses the live puzzle and exact move position, runs the History replay as a sandbox, and provides **Back to Streak**. Results from that sandbox are recorded in History but do not increase or end the active streak.
 
+The turn indicator, solution move arrows, move chips, and puzzle action buttons
+sit directly below the board so they remain reachable without scrolling on a
+phone.
+
 Alternatively, drag `index.html` onto a browser window or bookmark the opened `file:///.../index.html` page.
 
 ## Refresh the puzzle library
