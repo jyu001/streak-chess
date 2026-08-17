@@ -16,6 +16,9 @@ The turn indicator, solution move arrows, move chips, and puzzle action buttons
 sit directly below the board so they remain reachable without scrolling on a
 phone.
 
+The active puzzle ID appears beneath the Category and Puzzle metrics, with a
+direct link to the corresponding puzzle page on Lichess.
+
 Alternatively, drag `index.html` onto a browser window or bookmark the opened `file:///.../index.html` page.
 
 ## Refresh the puzzle library

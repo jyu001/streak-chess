@@ -53,6 +53,19 @@
 .filter-body label { margin: 10px 0; }
 .primary.compact { padding: 10px; margin-top: 6px; }
 .metric-grid strong { font-size: 18px; }
+.puzzle-reference {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px 8px;
+  border-bottom: 1px solid #555;
+  color: #999;
+  font-size: 12px;
+}
+.puzzle-reference code { color: #ddd; font: 700 12px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.puzzle-reference a { margin-left: auto; color: #9bc765; font-weight: 700; text-decoration: none; white-space: nowrap; }
+.puzzle-reference a:hover { color: #b2d889; text-decoration: underline; }
 
 /* Intrinsic SVG dimensions must never participate in grid track sizing. */
 .board {

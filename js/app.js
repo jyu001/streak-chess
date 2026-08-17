@@ -1,6 +1,6 @@
 (function(){
  const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
- const els={board:$('#board'),message:$('#boardMessage'),hint:$('#turnHint'),play:$('#playView'),end:$('#endView'),filters:$('#filterSection'),range:$('#ratingRange'),category:$('#category'),filterSummary:$('#filterSummary'),score:$('#streakScore'),target:$('#targetRating'),passed:$('#currentBest'),playingCategory:$('#playingCategory'),number:$('#puzzleNumber'),status:$('#playStatus'),review:$('#reviewControls'),reviewMoves:$('#reviewMoves'),reviewPrevious:$('#reviewPrevious'),reviewNext:$('#reviewNext'),reviewPosition:$('#reviewPosition'),nextPuzzle:$('#nextPuzzleButton'),replayPuzzle:$('#replayPuzzleButton'),backToStreak:$('#backToStreakButton'),giveUp:$('#giveUpButton')};
+ const els={board:$('#board'),message:$('#boardMessage'),hint:$('#turnHint'),play:$('#playView'),end:$('#endView'),filters:$('#filterSection'),range:$('#ratingRange'),category:$('#category'),filterSummary:$('#filterSummary'),score:$('#streakScore'),target:$('#targetRating'),passed:$('#currentBest'),playingCategory:$('#playingCategory'),number:$('#puzzleNumber'),puzzleReference:$('#puzzleReference'),puzzleId:$('#puzzleId'),puzzleLink:$('#puzzleLink'),status:$('#playStatus'),review:$('#reviewControls'),reviewMoves:$('#reviewMoves'),reviewPrevious:$('#reviewPrevious'),reviewNext:$('#reviewNext'),reviewPosition:$('#reviewPosition'),nextPuzzle:$('#nextPuzzleButton'),replayPuzzle:$('#replayPuzzleButton'),backToStreak:$('#backToStreakButton'),giveUp:$('#giveUpButton')};
  const defaults={coordinates:true,sound:true,animation:true,window:75};
  const playableBuckets=new Set(Array.from({length:21},(_,i)=>1000+i*100));
  const isPlayableBucket=bucket=>playableBuckets.has(Number(bucket));
@@ -24,6 +24,9 @@
  function bucketPool(){return window.PUZZLE_BUCKETS[run.rangeMin]||[]}
  function matchingPuzzles(includeSolved=false){return bucketPool().filter(p=>p.themes.includes(run.category)&&(includeSolved||!passedIds.has(p.id)))}
  function choosePuzzle(){let eligible=matchingPuzzles().filter(p=>p.id!==lastPuzzleId);if(!eligible.length)eligible=matchingPuzzles();return eligible[Math.floor(Math.random()*eligible.length)]||null}
+ function updatePuzzleReference(selectedPuzzle){
+  const id=String(selectedPuzzle?.id||'');els.puzzleReference.classList.toggle('hidden',!id);els.puzzleId.textContent=id;els.puzzleLink.href=id?`https://lichess.org/training/${encodeURIComponent(id)}`:'#'
+ }
  function userIsWhite(){const from=puzzle.moves[0].slice(0,2),piece=engine.position[from];return !(piece===piece.toUpperCase())}
  function lockReview(message='Solve puzzle to review moves'){els.review.classList.remove('hidden');els.review.classList.add('locked');els.reviewMoves.innerHTML='';els.reviewPrevious.disabled=true;els.reviewNext.disabled=true;els.reviewPosition.textContent=message}
  function resetReview(){lockReview();els.nextPuzzle.disabled=true;els.replayPuzzle.classList.add('hidden');els.backToStreak.classList.add('hidden');els.giveUp.classList.remove('hidden')}
@@ -34,7 +37,7 @@
  }
 
  async function presentPuzzle(selectedPuzzle){
-  const mine=++token;puzzle=selectedPuzzle;index=0;puzzleRecorded=false;resetReview();run.currentSolved=false;run.ended=false;
+  const mine=++token;puzzle=selectedPuzzle;index=0;puzzleRecorded=false;resetReview();run.currentSolved=false;run.ended=false;updatePuzzleReference(puzzle);
   if(!puzzle){engine.locked=true;engine.loadFen('8/8/8/8/8/8/8/8 w - - 0 1');els.status.textContent=matchingPuzzles(true).length?'Every puzzle in this range has been passed.':'No puzzles are available in this range.';els.hint.textContent='Choose another rating level in Filters.';els.filters.open=true;return}
   lastPuzzleId=puzzle.id;els.board.setAttribute('aria-label',`Interactive chess board, puzzle ${puzzle.id}`);engine.loadFen(puzzle.fen);
   const initial=puzzle.moves[0],userWhite=userIsWhite();
@@ -85,7 +88,7 @@
  }
 
  async function startRun(){
-  pausedStreak=null;const startToken=++token;run={rangeMin:+els.range.value,startRating:+els.range.value,category:els.category.value,score:0,startedAt:Date.now(),puzzles:[],ended:false,currentSolved:false};
+  pausedStreak=null;const startToken=++token;run={rangeMin:+els.range.value,startRating:+els.range.value,category:els.category.value,score:0,startedAt:Date.now(),puzzles:[],ended:false,currentSolved:false};updatePuzzleReference(null);
   view('play');resetReview();els.filters.open=false;engine.locked=true;engine.loadFen('8/8/8/8/8/8/8/8 w - - 0 1');els.status.textContent='Loading puzzle library…';els.hint.textContent=`Loading ${rangeLabel(run.rangeMin)} Mate puzzles`;
   try{const pool=await loadBucket(run.rangeMin);if(startToken!==token||run.ended)return;const count=(window.PUZZLE_BUCKET_COUNTS||{})[run.rangeMin]||pool.length;els.filterSummary.textContent=`${rangeLabel(run.rangeMin)} · Mate · ${count.toLocaleString()}`;updatePanel();loadPuzzle()}
   catch(error){console.error(error);els.status.textContent='Puzzle library could not be loaded.';els.hint.textContent='Keep the data/browser folder beside index.html.';els.filters.open=true}
@@ -132,7 +135,7 @@
   lastPuzzleId=puzzle.id;els.filterSummary.textContent=`${rangeLabel(bucket)} · Mate · Replay`;updatePanel();await presentPuzzle(puzzle);if(record.result==='pass')unlockSolvedHistoryNavigation();if(pausedStreak){els.nextPuzzle.disabled=true;els.backToStreak.classList.remove('hidden')}return true
  }
  function restorePausedStreak(){
-  if(!pausedStreak)return;const saved=pausedStreak;pausedStreak=null;token++;run=saved.run;puzzle=saved.puzzle;index=saved.index;puzzleRecorded=saved.puzzleRecorded;lastPuzzleId=saved.lastPuzzleId;puzzleStartedAt=saved.puzzleStartedAt+(Date.now()-saved.pausedAt);view('play');els.filters.open=false;els.backToStreak.classList.add('hidden');els.board.setAttribute('aria-label',`Interactive chess board, puzzle ${puzzle.id}`);engine.loadFen(puzzle.fen);const white=userIsWhite();engine.setOrientation(white?'white':'black');for(let i=0;i<index;i++)engine.move(puzzle.moves[i]);updatePanel();
+  if(!pausedStreak)return;const saved=pausedStreak;pausedStreak=null;token++;run=saved.run;puzzle=saved.puzzle;index=saved.index;puzzleRecorded=saved.puzzleRecorded;lastPuzzleId=saved.lastPuzzleId;puzzleStartedAt=saved.puzzleStartedAt+(Date.now()-saved.pausedAt);view('play');els.filters.open=false;els.backToStreak.classList.add('hidden');els.board.setAttribute('aria-label',`Interactive chess board, puzzle ${puzzle.id}`);updatePuzzleReference(puzzle);engine.loadFen(puzzle.fen);const white=userIsWhite();engine.setOrientation(white?'white':'black');for(let i=0;i<index;i++)engine.move(puzzle.moves[i]);updatePanel();
   if(run.currentSolved)enterReview('pass');else{resetReview();engine.locked=false;els.status.textContent='Your move';els.hint.textContent=white?'White to move':'Black to move'}
  }
  async function openHistoryReplay(){
